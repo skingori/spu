@@ -65,7 +65,7 @@ if(isset($_POST['clockin'])) {
 <audio id="audio" src="http://www.soundjay.com/button/beep-07.wav" autostart="false" ></audio>
 <script>
     var sound = document.getElementById("audio");
-    sound.play()
+    sound.play();
 
 </script>
 

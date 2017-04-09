@@ -7,7 +7,17 @@
  */
 // Inialize session
 session_start();
+include '../connection/db.php';
+$username=$_SESSION['logname'];
 
+$result1 = mysqli_query($con, "SELECT * FROM user_details WHERE user_username='$username'");
+
+while($res = mysqli_fetch_array($result1))
+{
+    $user_firstname= $res['user_firstname'];
+    $user_lastname= $res['user_lastname'];
+
+}
 // Check, if user is already login, then jump to secured page
 if (isset($_SESSION['logname']) && isset($_SESSION['rank'])) {
     switch($_SESSION['rank']) {
@@ -41,11 +51,11 @@ if(isset($_POST['update']))
     $user_firstname = mysqli_real_escape_string($con, $_POST['fname']);
     $user_lastname = mysqli_real_escape_string($con, $_POST['lname']);
     $user_payrollnumber = mysqli_real_escape_string($con, $_POST['pnumber']);
-    $user_email = mysqli_real_escape_string($con, $_POST['email']);
+    $user_email_ = mysqli_real_escape_string($con, $_POST['email']);
     $user_phone = mysqli_real_escape_string($con, $_POST['phone']);
 
     // checking empty fields
-    if(empty($user_firstname) || empty($user_payrollnumber ) || empty($user_email)) {
+    if(empty($user_firstname) || empty($user_payrollnumber ) || empty($user_email_)) {
 
         if(empty($user_firstname)) {
             echo "<font color='red'>Name field is empty.</font><br/>";
@@ -55,12 +65,12 @@ if(isset($_POST['update']))
             echo "<font color='red'>Age field is empty.</font><br/>";
         }
 
-        if(empty($user_email)) {
+        if(empty($user_email_)) {
             echo "<font color='red'>Email field is empty.</font><br/>";
         }
     } else {
         //updating the table
-        $result = mysqli_query($con, "UPDATE user_details SET user_firstname='$user_firstname',user_lastname='$user_lastname',user_payrollnumber='$user_payrollnumber' ,user_email='$user_email',user_phone='$user_phone' WHERE id=$id_");
+        $result = mysqli_query($con, "UPDATE user_details SET user_firstname='$user_firstname',user_lastname='$user_lastname',user_payrollnumber='$user_payrollnumber' , user_email='$user_email_',user_phone='$user_phone' WHERE id=$id_");
 
         //redirectig to the display page. In our case, it is index.php
         header("Location: index.php");
@@ -137,10 +147,10 @@ while($res = mysqli_fetch_array($result))
                 <li class="dropdown messages-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         <i class="fa fa-envelope"></i>
-                        <span class="label label-success">4</span>
+                        <span class="label label-success">0</span>
                     </a>
                     <ul class="dropdown-menu">
-                        <li class="header">You have 4 messages</li>
+                        <li class="header">You have 0 messages</li>
                         <li>
                             <!-- inner menu: contains the actual data -->
 
@@ -153,10 +163,10 @@ while($res = mysqli_fetch_array($result))
                 <li class="dropdown notifications-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         <i class="fa fa-warning"></i>
-                        <span class="label label-warning">10</span>
+                        <span class="label label-warning">0</span>
                     </a>
                     <ul class="dropdown-menu">
-                        <li class="header">You have 10 notifications</li>
+                        <li class="header">You have 0 notifications</li>
                         <li>
                             <!-- inner menu: contains the actual data -->
 
@@ -171,7 +181,7 @@ while($res = mysqli_fetch_array($result))
                 <li class="dropdown user user-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         <i class="glyphicon glyphicon-user"></i>
-                        <span><?php echo "$username"; ?> profile<i class="caret"></i></span>
+                        <span><?php echo "$user_firstname&nbsp$user_lastname";?><i class="caret"></i></span>
                     </a>
                     <ul class="dropdown-menu">
                         <!-- User image -->
@@ -187,10 +197,10 @@ while($res = mysqli_fetch_array($result))
                         <!-- Menu Footer-->
                         <li class="user-footer">
                             <div class="pull-left">
-                                <a href="#" class="btn btn-default btn-flat">Profile</a>
+                                <a href="myprof.php" class="btn btn-default btn-flat">Profile</a>
                             </div>
                             <div class="pull-right">
-                                <a href="#" class="btn btn-default btn-flat">Sign out</a>
+                                <a href="../logout.php?logout" class="btn btn-default btn-flat">Sign out</a>
                             </div>
                         </li>
                     </ul>
@@ -244,30 +254,31 @@ while($res = mysqli_fetch_array($result))
                         <li><a href="activate.php"><i class="fa fa-angle-double-right"></i> Activate Users</a></li>
                         <li><a href="crud.php"><i class="fa fa-angle-double-right"></i> Manage Users</a></li>
                         <li><a href="add.php"><i class="fa fa-angle-double-right"></i> New Users</a></li>
+                        <li><a href="payroll.php"><i class="fa fa-angle-double-right"></i> Add payments</a></li>
                         <li><a href="addscan.php"><i class="fa fa-angle-double-right"></i> Add scan device</a></li>
 
                     </ul>
                 </li>
                 <li class="treeview">
                     <a href="#">
-                        <i class="fa fa-edit"></i> <span>Profile</span>
+                        <i class="fa fa-edit"></i> <span>My Profile</span>
                         <i class="fa fa-angle-left pull-right"></i>
                     </a>
                     <ul class="treeview-menu">
-                        <li><a href="pages/forms/general.html"><i class="fa fa-angle-double-right"></i> Change Password</a></li>
-                        <li><a href="pages/forms/advanced.html"><i class="fa fa-angle-double-right"></i> Logs</a></li>
+                        <li><a href="profile.php"><i class="fa fa-angle-double-right"></i> Change Password</a></li>
+                        <li><a href="mylogs.php"><i class="fa fa-angle-double-right"></i> My logs</a></li>
                         <li><a href="../logout.php?logout"><i class="fa fa-angle-double-right"></i> Logout</a></li>
                     </ul>
                 </li>
 
                 <li>
-                    <a href="pages/calendar.html">
-                        <i class="fa fa-calendar"></i> <span>Calendar</span>
+                    <a href="news.php">
+                        <i class="fa fa-envelope-o"></i> <span>News</span>
                         <small class="badge pull-right bg-red"><!--3--></small>
                     </a>
                 </li>
                 <li>
-                    <a href="pages/mailbox.html">
+                    <a href="mailbox.php">
                         <i class="fa fa-envelope"></i> <span>Mailbox</span>
                         <small class="badge pull-right bg-yellow"><!--12--></small>
                     </a>
@@ -291,7 +302,6 @@ while($res = mysqli_fetch_array($result))
                 <li class="active">Dashboard</li>
             </ol>
         </section>
-
         <!-- Main content -->
         <section class="content">
 

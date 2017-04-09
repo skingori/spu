@@ -1,5 +1,16 @@
 <?php
 session_start();
+include '../connection/db.php';
+$username=$_SESSION['logname'];
+
+$result1 = mysqli_query($con, "SELECT * FROM user_details WHERE user_username='$username'");
+
+while($res = mysqli_fetch_array($result1))
+{
+    $user_firstname= $res['user_firstname'];
+    $user_lastname= $res['user_lastname'];
+
+}
 /**
  * Created by PhpStorm.
  * User: king
@@ -7,7 +18,6 @@ session_start();
  * Time: 11:24
  */
 // Inialize session
-session_start();
 
 // Check, if user is already login, then jump to secured page
 if (isset($_SESSION['logname']) && isset($_SESSION['rank'])) {
@@ -138,10 +148,10 @@ if(isset($_POST['register'])) {
                 <li class="dropdown messages-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         <i class="fa fa-envelope"></i>
-                        <span class="label label-success">4</span>
+                        <span class="label label-success">0</span>
                     </a>
                     <ul class="dropdown-menu">
-                        <li class="header">You have 4 messages</li>
+                        <li class="header">You have 0 messages</li>
                         <li>
                             <!-- inner menu: contains the actual data -->
 
@@ -154,10 +164,10 @@ if(isset($_POST['register'])) {
                 <li class="dropdown notifications-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         <i class="fa fa-warning"></i>
-                        <span class="label label-warning">10</span>
+                        <span class="label label-warning">0</span>
                     </a>
                     <ul class="dropdown-menu">
-                        <li class="header">You have 10 notifications</li>
+                        <li class="header">You have 0 notifications</li>
                         <li>
                             <!-- inner menu: contains the actual data -->
 
@@ -172,7 +182,7 @@ if(isset($_POST['register'])) {
                 <li class="dropdown user user-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         <i class="glyphicon glyphicon-user"></i>
-                        <span><?php echo "$username"; ?> profile<i class="caret"></i></span>
+                        <span><?php echo "$user_firstname&nbsp$user_lastname";?><i class="caret"></i></span>
                     </a>
                     <ul class="dropdown-menu">
                         <!-- User image -->
@@ -188,10 +198,10 @@ if(isset($_POST['register'])) {
                         <!-- Menu Footer-->
                         <li class="user-footer">
                             <div class="pull-left">
-                                <a href="#" class="btn btn-default btn-flat">Profile</a>
+                                <a href="myprof.php" class="btn btn-default btn-flat">Profile</a>
                             </div>
                             <div class="pull-right">
-                                <a href="#" class="btn btn-default btn-flat">Sign out</a>
+                                <a href="../logout.php?logout" class="btn btn-default btn-flat">Sign out</a>
                             </div>
                         </li>
                     </ul>
@@ -245,30 +255,31 @@ if(isset($_POST['register'])) {
                         <li><a href="activate.php"><i class="fa fa-angle-double-right"></i> Activate Users</a></li>
                         <li><a href="crud.php"><i class="fa fa-angle-double-right"></i> Manage Users</a></li>
                         <li><a href="add.php"><i class="fa fa-angle-double-right"></i> New Users</a></li>
+                        <li><a href="payroll.php"><i class="fa fa-angle-double-right"></i> Add payments</a></li>
                         <li><a href="addscan.php"><i class="fa fa-angle-double-right"></i> Add scan device</a></li>
 
                     </ul>
                 </li>
                 <li class="treeview">
                     <a href="#">
-                        <i class="fa fa-edit"></i> <span>Profile</span>
+                        <i class="fa fa-edit"></i> <span>My Profile</span>
                         <i class="fa fa-angle-left pull-right"></i>
                     </a>
                     <ul class="treeview-menu">
-                        <li><a href="pages/forms/general.html"><i class="fa fa-angle-double-right"></i> Change Password</a></li>
-                        <li><a href="pages/forms/advanced.html"><i class="fa fa-angle-double-right"></i> Logs</a></li>
+                        <li><a href="profile.php"><i class="fa fa-angle-double-right"></i> Change Password</a></li>
+                        <li><a href="mylogs.php"><i class="fa fa-angle-double-right"></i> My logs</a></li>
                         <li><a href="../logout.php?logout"><i class="fa fa-angle-double-right"></i> Logout</a></li>
                     </ul>
                 </li>
 
                 <li>
-                    <a href="pages/calendar.html">
-                        <i class="fa fa-calendar"></i> <span>Calendar</span>
+                    <a href="news.php">
+                        <i class="fa fa-envelope-o"></i> <span>News</span>
                         <small class="badge pull-right bg-red"><!--3--></small>
                     </a>
                 </li>
                 <li>
-                    <a href="pages/mailbox.html">
+                    <a href="mailbox.php">
                         <i class="fa fa-envelope"></i> <span>Mailbox</span>
                         <small class="badge pull-right bg-yellow"><!--12--></small>
                     </a>
@@ -292,6 +303,7 @@ if(isset($_POST['register'])) {
                 <li class="active">Dashboard</li>
             </ol>
         </section>
+
 
         <!-- Main content -->
         <section class="content">
